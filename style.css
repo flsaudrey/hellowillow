@@ -60,6 +60,38 @@ main {
     font-weight: 1000
 }
 
+.ramble{
+text-align: center;
+}
+
+.ramble-hover {
+    position: relative;
+    cursor: default;
+    display: inline-block;
+}
+
+.floating-text {
+    position: fixed;
+    font-family: "JetBrains Mono", monospace;
+    font-size: 12px;
+    color: #2b2b2b;
+    pointer-events: none;
+    animation: float-away 100s ease-out forwards;
+    white-space: nowrap;
+    z-index: 9999;
+}
+
+@keyframes float-away {
+    0% {
+        opacity: 1;
+        transform: translate(0, 0);
+    }
+    100% {
+        opacity: 0;
+        transform: translate(var(--x), var(--y));
+    }
+}
+
 .dots .dot {
     opacity: 1;
     animation: dot-appear 1.5s infinite;
@@ -70,8 +102,8 @@ main {
 .dots .dot:nth-child(3) { animation-delay: 0.6s; }
 
 @keyframes dot-appear {
-    0%, 20% { opacity: 1; }
-    40%, 100% { opacity: 0; }
+    0%, 30% { opacity: 1; }
+    60%, 100% { opacity: 0; }
 }
 
 .waitlist-form {

@@ -31,19 +31,19 @@
 
                 <div class="spacer"></div>
 
-                <p>ramble?</p>
+                <p style="text-align: right";><span class="ramble-hover" id="ramble">ramble</span>?</p>
 
                 <div class="spacer"></div>
 
-                <p>so have we.</p>
+                <p>SO HAVE WE.</p>
 
                 <div class="spacer"></div>
 
-                <p>that's why we built <span class="textcolor">willow</span></p>
+                <p>THAT'S WHY WE BUILT <span class="textcolor">willow</span></p>
 
-                <p>a safe space for your never-ending thoughts.</p>
+                <p>A SAFE SPACE FOR YOUR NEVER-ENDING THOUGHTS.</p>
 
-                <p>because your mind is the ultimate playground</p>
+                <p>BECAUSE YOUR MIND IS THE ULTIMATE PLAYGROUND</p>
 
                 <div class="spacer"></div>
 
@@ -103,6 +103,89 @@
                 button.textContent = 'join waitlist';
             }
         });
+    </script>
+
+    <script>
+        const ramble = document.getElementById('ramble');
+        const randomTexts = ["the epicness of oppenheimer...", "day 2 of building a virtual dj", "@#%%^!$", "&^%$#&*%$#$",
+        "journal entry: 10 red-tailed hawks spotted!", "tomorrow, and tomorrow, and tomorrow - thoughts", "coachella: colors"];
+        let floatingTexts = [];
+        let isFloating = false;
+        let availableTexts = [...randomTexts];
+
+        function getNextText() {
+            if (availableTexts.length === 0) {
+                availableTexts = [...randomTexts];
+            }
+            const index = Math.floor(Math.random() * availableTexts.length);
+            return availableTexts.splice(index, 1)[0];
+        }
+
+        function createFloating() {
+            if (!isFloating) return;
+
+            const rect = ramble.getBoundingClientRect();
+            const centerX = rect.left - rect.width*5;
+            const centerY = rect.top - rect.height/2;
+
+            const text = document.createElement('span');
+            text.className = 'floating-text';
+            text.textContent = getNextText();
+
+            const angle = Math.PI / 2 + Math.random() * Math.PI;
+            const startDistance = 20;
+            const floatDistance = 1000 + Math.random() * 60;
+            const startX = centerX + Math.cos(angle) * startDistance;
+            const startY = centerY + Math.sin(angle) * startDistance;
+            text.style.left = startX + 'px';
+            text.style.top = startY + 'px';
+            text.style.setProperty('--x', `${Math.cos(angle) * floatDistance}px`);
+            text.style.setProperty('--y', `${Math.sin(angle) * floatDistance}px`);
+
+            const gray = Math.floor(Math.random() * 180);
+            text.style.color = `rgb(${gray}, ${gray}, ${gray})`;
+
+            document.body.appendChild(text);
+            floatingTexts.push(text);
+
+            setTimeout(() => {
+                text.remove();
+                floatingTexts = floatingTexts.filter(t => t !== text);
+            }, 1000);
+
+            setTimeout(createFloating, 1000);
+        }
+
+        function startFloating() {
+            if (isFloating) return;
+            isFloating = true;
+            createFloating();
+        }
+
+        function stopFloating() {
+            isFloating = false;
+            floatingTexts.forEach(t => t.remove());
+            floatingTexts = [];
+        }
+
+        // Desktop: hover
+        ramble.addEventListener('mouseenter', startFloating);
+        ramble.addEventListener('mouseleave', stopFloating);
+
+        // Mobile: scroll into view
+        const isMobile = window.matchMedia('(max-width: 600px)').matches || 'ontouchstart' in window;
+        if (isMobile) {
+            const observer = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        startFloating();
+                    } else {
+                        stopFloating();
+                    }
+                });
+            }, { threshold: 0.5 });
+            observer.observe(ramble);
+        }
     </script>
 </body>
 </html>
