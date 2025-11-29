@@ -20,6 +20,10 @@ main {
     padding: 80px 40px;
 }
 
+.spacer {
+    height: 140px;
+}
+
 .container {
     max-width: 600px;
     margin: 0 auto;
@@ -39,14 +43,8 @@ main {
 
 .content h2 {
     font-size: 24px;
-    margin-bottom: 50%;
-    margin-top: 70%;
     font-weight: 1200;
     color: #202020;
-}
-
-.spacer {
-    height: 140px;
 }
 
 .highlight {
@@ -57,7 +55,8 @@ main {
 
 .textcolor {
     color: #000000;
-    font-weight: 1000
+    font-weight: 1000;
+    opacity: 1;
 }
 
 .ramble{
@@ -93,17 +92,18 @@ text-align: center;
 }
 
 .dots .dot {
-    opacity: 1;
-    animation: dot-appear 1.5s infinite;
+    opacity: 0;
+    animation: dot-appear 2.4s infinite;
 }
 
-.dots .dot:nth-child(1) { animation-delay: 0s; }
-.dots .dot:nth-child(2) { animation-delay: 0.3s; }
-.dots .dot:nth-child(3) { animation-delay: 0.6s; }
+.dot-1 { animation-delay: 0s !important; }
+.dot-2 { animation-delay: 0.5s !important; }
+.dot-3 { animation-delay: 1s !important; }
 
 @keyframes dot-appear {
-    0%, 30% { opacity: 1; }
-    60%, 100% { opacity: 0; }
+    0% { opacity: 0; }
+    10%, 60% { opacity: 1; }
+    80%, 100% { opacity: 0; }
 }
 
 .waitlist-form {
