@@ -107,9 +107,10 @@
         const ramble = document.getElementById('ramble');
         const randomTexts = ["the epicness of oppenheimer...", "day 2 of building a virtual dj", "@#%%^!$", "&^%$#&*%$#$",
         "journal entry: 10 red-tailed hawks spotted!", "tomorrow, and tomorrow, and tomorrow - thoughts", "coachella: colors"];
-        let floatingTexts = [];
-        let isFloating = false;
+        let typingElements = [];
+        let isActive = false;
         let availableTexts = [...randomTexts];
+        let spawnInterval = null;
 
         function getNextText() {
             if (availableTexts.length === 0) {
@@ -119,56 +120,84 @@
             return availableTexts.splice(index, 1)[0];
         }
 
-        function createFloating() {
-            if (!isFloating) return;
+        function createTypingElement() {
+            if (!isActive) return;
 
-            const rect = ramble.getBoundingClientRect();
-            const centerX = rect.left - rect.width*5;
-            const centerY = rect.top - rect.height/2;
+            const container = document.createElement('div');
+            container.className = 'typing-container';
 
-            const text = document.createElement('span');
-            text.className = 'floating-text';
-            text.textContent = getNextText();
+            // Random position on screen (middle 60% of height)
+            const x = 50 + Math.random() * (window.innerWidth - 400);
+            const y = window.innerHeight * 0.2 + Math.random() * (window.innerHeight * 0.6);
+            container.style.left = x + 'px';
+            container.style.top = y + 'px';
 
-            const angle = Math.PI / 2 + Math.random() * Math.PI;
-            const startDistance = 20;
-            const floatDistance = 1000 + Math.random() * 60;
-            const startX = centerX + Math.cos(angle) * startDistance;
-            const startY = centerY + Math.sin(angle) * startDistance;
-            text.style.left = startX + 'px';
-            text.style.top = startY + 'px';
-            text.style.setProperty('--x', `${Math.cos(angle) * floatDistance}px`);
-            text.style.setProperty('--y', `${Math.sin(angle) * floatDistance}px`);
+            // Random gray color
+            const gray = Math.floor(100 + Math.random() * 100);
+            container.style.color = `rgb(${gray}, ${gray}, ${gray})`;
 
-            const gray = Math.floor(Math.random() * 180);
-            text.style.color = `rgb(${gray}, ${gray}, ${gray})`;
+            const textSpan = document.createElement('span');
+            textSpan.className = 'typing-text';
+            const cursorSpan = document.createElement('span');
+            cursorSpan.className = 'typing-cursor';
+            cursorSpan.textContent = '|';
 
-            document.body.appendChild(text);
-            floatingTexts.push(text);
+            container.appendChild(textSpan);
+            container.appendChild(cursorSpan);
+            document.body.appendChild(container);
+            typingElements.push(container);
 
-            setTimeout(() => {
-                text.remove();
-                floatingTexts = floatingTexts.filter(t => t !== text);
-            }, 1000);
+            const fullText = getNextText();
+            let charIndex = 0;
 
-            setTimeout(createFloating, 1000);
+            function typeChar() {
+                if (!isActive || charIndex >= fullText.length) {
+                    if (charIndex >= fullText.length) {
+                        // Finished typing, fade out after a pause
+                        setTimeout(() => {
+                            container.classList.add('fade-out');
+                            setTimeout(() => {
+                                container.remove();
+                                typingElements = typingElements.filter(el => el !== container);
+                            }, 1000);
+                        }, 1500);
+                    }
+                    return;
+                }
+                textSpan.textContent = fullText.substring(0, charIndex + 1);
+                charIndex++;
+                setTimeout(typeChar, 40 + Math.random() * 60);
+            }
+
+            typeChar();
         }
 
-        function startFloating() {
-            if (isFloating) return;
-            isFloating = true;
-            createFloating();
+        function startTyping() {
+            if (isActive) return;
+            isActive = true;
+            document.body.classList.add('ramble-active');
+            createTypingElement();
+            spawnInterval = setInterval(() => {
+                if (isActive && typingElements.length < 4) {
+                    createTypingElement();
+                }
+            }, 800);
         }
 
-        function stopFloating() {
-            isFloating = false;
-            floatingTexts.forEach(t => t.remove());
-            floatingTexts = [];
+        function stopTyping() {
+            isActive = false;
+            document.body.classList.remove('ramble-active');
+            clearInterval(spawnInterval);
+            typingElements.forEach(el => {
+                el.classList.add('fade-out');
+                setTimeout(() => el.remove(), 1000);
+            });
+            typingElements = [];
         }
 
         // Desktop: hover
-        ramble.addEventListener('mouseenter', startFloating);
-        ramble.addEventListener('mouseleave', stopFloating);
+        ramble.addEventListener('mouseenter', startTyping);
+        ramble.addEventListener('mouseleave', stopTyping);
 
         // Mobile: scroll into view
         const isMobile = window.matchMedia('(max-width: 600px)').matches || 'ontouchstart' in window;
@@ -176,9 +205,9 @@
             const observer = new IntersectionObserver((entries) => {
                 entries.forEach(entry => {
                     if (entry.isIntersecting) {
-                        startFloating();
+                        startTyping();
                     } else {
-                        stopFloating();
+                        stopTyping();
                     }
                 });
             }, { threshold: 0.5 });
