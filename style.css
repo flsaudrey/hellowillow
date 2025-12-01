@@ -168,7 +168,7 @@ body.ramble-active .ramble-hover {
 }
 
 .waitlist-form button:hover {
-    background-color: #f7f2fc;
+    background-color: #9f93ab;
 }
 
 .waitlist-form button:disabled {
@@ -265,6 +265,35 @@ footer a:hover {
 
 .privacy-content strong {
     color: #1d1d1f;
+}
+
+.willow-input {
+    font-family: "JetBrains Mono", monospace;
+    font-size: 14px;
+    font-weight: 400;
+    color: #000000;
+    background: transparent;
+    border: none;
+    outline: none;
+    width: 60px;
+    padding: 0;
+}
+
+.willow-input::placeholder {
+    color: #000000;
+    opacity: 0.2;
+    font-weight: 400;
+}
+
+.willow-icon {
+    padding-top: 10%;
+    padding-right: 10px;
+    width: 50px;
+    height: auto;
+}
+
+body.scroll-locked {
+    overflow: hidden;
 }
 
 @media (max-width: 600px) {

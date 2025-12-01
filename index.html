@@ -31,19 +31,25 @@
 
                 <div class="spacer"></div>
 
-                <p style="text-align: right";><span class="ramble-hover" id="ramble">ramble</span>?</p>
+                <p style="text-align: right";><span class="ramble-hover" id="ramble">ramble?</span></p>
 
                 <div class="spacer"></div>
 
-                <p style="opacity: 0.45">SO HAVE WE.</p>
+                <p style="opacity: 0.45; text-align: left;">SO HAVE WE.</p>
 
                 <div class="spacer"></div>
 
-                <p style="opacity: 0.65">THAT'S WHY WE BUILT : <span class="textcolor">willow</span></p>
+                <p style="text-align: center;">THAT'S WHY WE BUILT </p>
+                <p style="text-align: center;"><img id="willow-icon" class="willow-icon" src="assets/bnwIcon.png" alt="Willow"></p>
+                <p style="text-align: center;"><input type="text" id="willow-input" class="willow-input" placeholder="willow" autocomplete="off"></p>
 
-                <p style="opacity: 0.85">A SAFE SPACE FOR YOUR NEVER-ENDING THOUGHTS.</p>
+                <div class="spacer"></div>
 
-                <p>BECAUSE YOUR MIND IS THE ULTIMATE PLAYGROUND.</p>
+                <p id="safe-space" style="opacity: 0.85; text-align: left;">A SAFE SPACE FOR YOUR NEVER-ENDING THOUGHTS.</p>
+
+                <div class="spacer"></div>
+
+                <p style="text-align: left;">BECAUSE YOUR MIND IS THE ULTIMATE PLAYGROUND.</p>
 
                 <div class="spacer"></div>
 
@@ -213,6 +219,39 @@
             }, { threshold: 0.5 });
             observer.observe(ramble);
         }
+    </script>
+
+    <script>
+        const willowInput = document.getElementById('willow-input');
+        const willowIcon = document.getElementById('willow-icon');
+        let scrollUnlocked = false;
+
+        // IntersectionObserver to detect when input is centered
+        const inputObserver = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting && !scrollUnlocked) {
+                    document.body.classList.add('scroll-locked');
+                    willowInput.focus();
+                }
+            });
+        }, { threshold: 0.5, rootMargin: '-40% 0px -40% 0px' });
+
+        inputObserver.observe(willowInput);
+
+        // Check for "willow" input
+        willowInput.addEventListener('input', () => {
+            if (willowInput.value.toLowerCase() === 'willow') {
+                scrollUnlocked = true;
+                document.body.classList.remove('scroll-locked');
+                willowIcon.src = 'assets/colorIcon.png';
+                willowInput.disabled = true;
+
+                // Auto-scroll after 0.6s
+                setTimeout(() => {
+                    document.getElementById('safe-space').scrollIntoView({ behavior: 'smooth' });
+                }, 600);
+            }
+        });
     </script>
 
 </body>
