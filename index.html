@@ -12,67 +12,64 @@
     <link rel="icon" type="image/png" href="assets/icon.png">
 </head>
 <body>
-    <main>
-        <div class="container">
-            <div class="content">
-                <h2>HAVE YOU EVER</h2>
+    <main class="snap-container">
+        <section class="snap-section">
+            <h2>HAVE YOU EVER</h2>
+        </section>
 
-                <div class="spacer"></div>
+        <section class="snap-section">
+            <p>LEFT A MOVIE THEATER : MESMERIZED</p>
+        </section>
 
-                <p>LEFT A MOVIE THEATER : MESMERIZED</p>
+        <section class="snap-section">
+            <p>CLOSED A BOOK : FASCINATED</p>
+        </section>
 
-                <p style="opacity: 0.85">CLOSED A BOOK : FASCINATED</p>
+        <section class="snap-section">
+            <p>ENVISIONED A FUTURE : INSPIRED</p>
+        </section>
 
-                <p style="opacity:0.65">ENVISIONED A FUTURE : INSPIRED</p>
+        <section class="snap-section">
+            <p>AND IN THESE MOMENTS<span class="dots"><span class="dot dot-1">.</span><span class="dot dot-2">.</span><span class="dot dot-3">.</span></span> WANTED TO</p>
+        </section>
 
-                <div class="spacer"></div>
+        <section class="snap-section">
+            <p style="text-align: right";><span class="ramble-hover" id="ramble-text">ramble?</span></p>
+        </section>
 
-                <p style="opacity: 0.45">AND IN THESE MOMENTS<span class="dots"><span class="dot dot-1">.</span><span class="dot dot-2">.</span><span class="dot dot-3">.</span></span> WANTED TO</p>
+        <section class="snap-section">
+            <p>SO HAVE WE.</p>
+        </section>
 
-                <div class="spacer"></div>
+        <section class="snap-section" id="willow-section">
+            <p style="text-align: center;">THAT'S WHY WE BUILT <span class="input-hint-wrapper"><span class="input-hint" id="willow-hint">willow</span><input type="text" id="willow-input" class="willow-input" autocomplete="off"></span></p>
+        </section>
 
-                <p style="text-align: right";><span class="ramble-hover" id="ramble">ramble?</span></p>
+        <section class="snap-section" id="safe-space-section">
+            <p id="safe-space">A SAFE SPACE FOR YOUR NEVER-ENDING THOUGHTS</p>
+        </section>
 
-                <div class="spacer"></div>
+        <section class="snap-section">
+            <p>BECAUSE YOUR MIND IS THE ULTIMATE PLAYGROUND.</p>
+        </section>
 
-                <p style="opacity: 0.45; text-align: left;">SO HAVE WE.</p>
+        <section class="snap-section">
+            <form id="waitlist-form" class="waitlist-form">
+                <input type="email" name="email" placeholder="YOUR EMAIL" required>
+                <button type="submit">JOIN WAITLIST</button>
+            </form>
+            <p id="form-message" class="form-message"></p>
+        </section>
 
-                <div class="spacer"></div>
-
-                <p style="text-align: center;">THAT'S WHY WE BUILT </p>
-                <p style="text-align: center;"><img id="willow-icon" class="willow-icon" src="assets/bnwIcon.png" alt="Willow"></p>
-                <p style="text-align: center;"><input type="text" id="willow-input" class="willow-input" placeholder="willow" autocomplete="off"></p>
-
-                <div class="spacer"></div>
-
-                <p id="safe-space" style="opacity: 0.85; text-align: left;">A SAFE SPACE FOR YOUR NEVER-ENDING THOUGHTS.</p>
-
-                <div class="spacer"></div>
-
-                <p style="text-align: left;">BECAUSE YOUR MIND IS THE ULTIMATE PLAYGROUND.</p>
-
-                <div class="spacer"></div>
-
-                <form id="waitlist-form" class="waitlist-form">
-                    <input type="email" name="email" placeholder="YOUR EMAIL" required>
-                    <button type="submit">JOIN WAITLIST</button>
-                </form>
-                <p id="form-message" class="form-message"></p>
-
-                <div class="spacer"></div>
-
-                <p>happy rambling!</p>
-
-                <p>💭</p>
-
-                <p>team willow</p>
-            </div>
-        </div>
+        <section class="snap-section snap-section-footer">
+            <p>happy rambling!</p>
+            <p>💭</p>
+            <p>team willow</p>
+            <footer>
+                <p>&copy; 2025 Willow &middot; <a href="privacy.html">Privacy</a></p>
+            </footer>
+        </section>
     </main>
-
-    <footer>
-        <p>&copy; 2025 Willow &middot; <a href="privacy.html">Privacy</a></p>
-    </footer>
 
     <script>
         const form = document.getElementById('waitlist-form');
@@ -110,11 +107,10 @@
     </script>
 
     <script>
-        const ramble = document.getElementById('ramble');
         const randomTexts = ["the epicness of oppenheimer...", "day 2 of building a virtual dj", "@#%%^!$", "&^%$#&*%$#$",
         "journal entry: 10 red-tailed hawks spotted!", "tomorrow, and tomorrow, and tomorrow - thoughts", "coachella: colors"];
         let typingElements = [];
-        let isActive = false;
+        let isRambleActive = false;
         let availableTexts = [...randomTexts];
         let spawnInterval = null;
 
@@ -127,7 +123,7 @@
         }
 
         function createTypingElement() {
-            if (!isActive) return;
+            if (!isRambleActive) return;
 
             const container = document.createElement('div');
             container.className = 'typing-container';
@@ -157,7 +153,7 @@
             let charIndex = 0;
 
             function typeChar() {
-                if (!isActive || charIndex >= fullText.length) {
+                if (!isRambleActive || charIndex >= fullText.length) {
                     if (charIndex >= fullText.length) {
                         // Finished typing, fade out after a pause
                         setTimeout(() => {
@@ -179,19 +175,19 @@
         }
 
         function startTyping() {
-            if (isActive) return;
-            isActive = true;
+            if (isRambleActive) return;
+            isRambleActive = true;
             document.body.classList.add('ramble-active');
             createTypingElement();
             spawnInterval = setInterval(() => {
-                if (isActive && typingElements.length < 4) {
+                if (isRambleActive && typingElements.length < 4) {
                     createTypingElement();
                 }
             }, 800);
         }
 
         function stopTyping() {
-            isActive = false;
+            isRambleActive = false;
             document.body.classList.remove('ramble-active');
             clearInterval(spawnInterval);
             typingElements.forEach(el => {
@@ -200,58 +196,137 @@
             });
             typingElements = [];
         }
-
-        // Desktop: hover
-        ramble.addEventListener('mouseenter', startTyping);
-        ramble.addEventListener('mouseleave', stopTyping);
-
-        // Mobile: scroll into view
-        const isMobile = window.matchMedia('(max-width: 600px)').matches || 'ontouchstart' in window;
-        if (isMobile) {
-            const observer = new IntersectionObserver((entries) => {
-                entries.forEach(entry => {
-                    if (entry.isIntersecting) {
-                        startTyping();
-                    } else {
-                        stopTyping();
-                    }
-                });
-            }, { threshold: 0.5 });
-            observer.observe(ramble);
-        }
     </script>
 
     <script>
+        // Input elements
         const willowInput = document.getElementById('willow-input');
-        const willowIcon = document.getElementById('willow-icon');
-        let scrollUnlocked = false;
+        const willowHint = document.getElementById('willow-hint');
 
-        // IntersectionObserver to detect when input is centered
-        const inputObserver = new IntersectionObserver((entries) => {
-            entries.forEach(entry => {
-                if (entry.isIntersecting && !scrollUnlocked) {
-                    document.body.classList.add('scroll-locked');
+        const snapContainer = document.querySelector('.snap-container');
+        const sections = document.querySelectorAll('.snap-section');
+        let currentSection = 0;
+        let isScrolling = false;
+
+        // Track which sections are unlocked
+        const sectionUnlocked = {
+            'willow-section': false
+        };
+
+        // Initialize first section on load
+        document.addEventListener('DOMContentLoaded', () => {
+            sections[0].classList.add('active');
+            currentSection = 0;
+        });
+
+        // Check if we can proceed past a locked section
+        function canProceedPast(sectionId) {
+            if (sectionUnlocked[sectionId] === undefined) return true;
+            return sectionUnlocked[sectionId];
+        }
+
+        // Navigate to a specific section with fade transition
+        function scrollToSection(index) {
+            if (index < 0 || index >= sections.length || isScrolling) return;
+
+            // Check each locked section when trying to go forward
+            if (index > currentSection) {
+                for (let i = currentSection; i < index; i++) {
+                    const sectionId = sections[i].id;
+                    if (!canProceedPast(sectionId)) {
+                        index = i;
+                        break;
+                    }
+                }
+            }
+
+            if (index === currentSection) return;
+
+            isScrolling = true;
+
+            // Fade out current section
+            sections[currentSection].classList.remove('active');
+
+            // Fade in new section
+            currentSection = index;
+            sections[currentSection].classList.add('active');
+
+            // Focus willow input when reaching that section
+            const currentId = sections[currentSection].id;
+            setTimeout(() => {
+                if (currentId === 'willow-section' && !sectionUnlocked['willow-section']) {
                     willowInput.focus();
                 }
-            });
-        }, { threshold: 0.5, rootMargin: '-40% 0px -40% 0px' });
+            }, 100);
 
-        inputObserver.observe(willowInput);
+            setTimeout(() => {
+                isScrolling = false;
+            }, 600);
+        }
 
-        // Check for "willow" input
+        // Handle wheel events
+        snapContainer.addEventListener('wheel', (e) => {
+            e.preventDefault();
+            if (isScrolling) return;
+
+            if (e.deltaY > 0) {
+                scrollToSection(currentSection + 1);
+            } else {
+                scrollToSection(currentSection - 1);
+            }
+        }, { passive: false });
+
+        // Handle touch events for mobile
+        let touchStartY = 0;
+        let touchEndY = 0;
+
+        snapContainer.addEventListener('touchstart', (e) => {
+            touchStartY = e.touches[0].clientY;
+        }, { passive: true });
+
+        snapContainer.addEventListener('touchend', (e) => {
+            touchEndY = e.changedTouches[0].clientY;
+            const diff = touchStartY - touchEndY;
+
+            if (Math.abs(diff) > 50) { // Minimum swipe distance
+                if (diff > 0) {
+                    scrollToSection(currentSection + 1);
+                } else {
+                    scrollToSection(currentSection - 1);
+                }
+            }
+        }, { passive: true });
+
+        // Handle keyboard navigation
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'ArrowDown' || e.key === 'PageDown') {
+                e.preventDefault();
+                scrollToSection(currentSection + 1);
+            } else if (e.key === 'ArrowUp' || e.key === 'PageUp') {
+                e.preventDefault();
+                scrollToSection(currentSection - 1);
+            }
+        });
+
+        // Willow input handler
         willowInput.addEventListener('input', () => {
             if (willowInput.value.toLowerCase() === 'willow') {
-                scrollUnlocked = true;
-                document.body.classList.remove('scroll-locked');
-                willowIcon.src = 'assets/colorIcon.png';
+                sectionUnlocked['willow-section'] = true;
                 willowInput.disabled = true;
+                willowHint.classList.add('hidden');
 
                 // Auto-scroll after 0.6s
                 setTimeout(() => {
-                    document.getElementById('safe-space').scrollIntoView({ behavior: 'smooth' });
+                    const safeSpaceIndex = Array.from(sections).findIndex(s => s.id === 'safe-space-section');
+                    scrollToSection(safeSpaceIndex);
                 }, 600);
             }
         });
+
+        // Ramble hover handler
+        const rambleText = document.getElementById('ramble-text');
+        rambleText.addEventListener('mouseenter', startTyping);
+        rambleText.addEventListener('mouseleave', stopTyping);
     </script>
 
 </body>
