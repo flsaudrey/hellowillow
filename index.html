@@ -18,15 +18,13 @@
         </section>
 
         <section class="snap-section">
-            <p>LEFT A MOVIE THEATER : MESMERIZED</p>
-        </section>
-
-        <section class="snap-section">
-            <p>CLOSED A BOOK : FASCINATED</p>
-        </section>
-
-        <section class="snap-section">
-            <p>ENVISIONED A FUTURE : INSPIRED</p>
+            <div class="section-content">
+                <p>LEFT A MOVIE THEATER : MESMERIZED</p>
+                <br />
+                <p>CLOSED A BOOK : FASCINATED</p>
+                <br />
+                <p>ENVISIONED A FUTURE : INSPIRED</p>
+            </div>
         </section>
 
         <section class="snap-section">
@@ -38,33 +36,27 @@
         </section>
 
         <section class="snap-section">
-            <p>SO HAVE WE.</p>
-        </section>
-
-        <section class="snap-section" id="willow-section">
-            <p style="text-align: center;">THAT'S WHY WE BUILT <span class="input-hint-wrapper"><span class="input-hint" id="willow-hint">willow</span><input type="text" id="willow-input" class="willow-input" autocomplete="off"></span></p>
-        </section>
-
-        <section class="snap-section" id="safe-space-section">
-            <p id="safe-space">A SAFE SPACE FOR YOUR NEVER-ENDING THOUGHTS</p>
+            <p>so have we.</p>
         </section>
 
         <section class="snap-section">
-            <p>BECAUSE YOUR MIND IS THE ULTIMATE PLAYGROUND.</p>
+            <p style="text-align: center;">that's why we built [willow]</p>
+        </section>
+
+        <section class="snap-section">
+            <div class="section-content">
+                <p>a safe space for your never-ending thoughts</p>
+                <br />
+                <p>bc your mind is the ultimate playground.</p>
+            </div>
         </section>
 
         <section class="snap-section">
             <form id="waitlist-form" class="waitlist-form">
-                <input type="email" name="email" placeholder="YOUR EMAIL" required>
-                <button type="submit">JOIN WAITLIST</button>
+                <input type="email" name="email" placeholder="your email" required>
+                <button type="submit">join waitlist</button>
             </form>
             <p id="form-message" class="form-message"></p>
-        </section>
-
-        <section class="snap-section snap-section-footer">
-            <p>happy rambling!</p>
-            <p>💭</p>
-            <p>team willow</p>
             <footer>
                 <p>&copy; 2025 Willow &middot; <a href="privacy.html">Privacy</a></p>
             </footer>
@@ -199,19 +191,10 @@
     </script>
 
     <script>
-        // Input elements
-        const willowInput = document.getElementById('willow-input');
-        const willowHint = document.getElementById('willow-hint');
-
         const snapContainer = document.querySelector('.snap-container');
         const sections = document.querySelectorAll('.snap-section');
         let currentSection = 0;
         let isScrolling = false;
-
-        // Track which sections are unlocked
-        const sectionUnlocked = {
-            'willow-section': false
-        };
 
         // Initialize first section on load
         document.addEventListener('DOMContentLoaded', () => {
@@ -219,28 +202,27 @@
             currentSection = 0;
         });
 
-        // Check if we can proceed past a locked section
-        function canProceedPast(sectionId) {
-            if (sectionUnlocked[sectionId] === undefined) return true;
-            return sectionUnlocked[sectionId];
-        }
-
         // Navigate to a specific section with fade transition
         function scrollToSection(index) {
             if (index < 0 || index >= sections.length || isScrolling) return;
+            if (index === currentSection) return;
 
-            // Check each locked section when trying to go forward
-            if (index > currentSection) {
-                for (let i = currentSection; i < index; i++) {
-                    const sectionId = sections[i].id;
-                    if (!canProceedPast(sectionId)) {
-                        index = i;
-                        break;
-                    }
-                }
+            // If navigating to last section, expand to show all as a single page
+            if (index === sections.length - 1) {
+                isScrolling = true;
+                sections[currentSection].classList.remove('active');
+                snapContainer.classList.add('expanded');
+                setTimeout(() => {
+                    isScrolling = false;
+                }, 100);
+                return;
             }
 
-            if (index === currentSection) return;
+            // If coming back from expanded mode
+            if (snapContainer.classList.contains('expanded')) {
+                snapContainer.classList.remove('expanded');
+                window.scrollTo({ top: 0 });
+            }
 
             isScrolling = true;
 
@@ -251,14 +233,6 @@
             currentSection = index;
             sections[currentSection].classList.add('active');
 
-            // Focus willow input when reaching that section
-            const currentId = sections[currentSection].id;
-            setTimeout(() => {
-                if (currentId === 'willow-section' && !sectionUnlocked['willow-section']) {
-                    willowInput.focus();
-                }
-            }, 100);
-
             setTimeout(() => {
                 isScrolling = false;
             }, 600);
@@ -267,6 +241,17 @@
         // Handle wheel events
         snapContainer.addEventListener('wheel', (e) => {
             e.preventDefault();
+
+            // In expanded mode, scroll up to collapse back
+            if (snapContainer.classList.contains('expanded')) {
+                if (e.deltaY < 0) {
+                    snapContainer.classList.remove('expanded');
+                    currentSection = sections.length - 2;
+                    sections[currentSection].classList.add('active');
+                }
+                return;
+            }
+
             if (isScrolling) return;
 
             if (e.deltaY > 0) {
@@ -292,6 +277,16 @@
             touchEndY = e.changedTouches[0].clientY;
             const diff = touchStartY - touchEndY;
 
+            // In expanded mode, swipe down to collapse back
+            if (snapContainer.classList.contains('expanded')) {
+                if (diff < -50) {
+                    snapContainer.classList.remove('expanded');
+                    currentSection = sections.length - 2;
+                    sections[currentSection].classList.add('active');
+                }
+                return;
+            }
+
             if (Math.abs(diff) > 50) { // Minimum swipe distance
                 if (diff > 0) {
                     scrollToSection(currentSection + 1);
@@ -303,27 +298,23 @@
 
         // Handle keyboard navigation
         document.addEventListener('keydown', (e) => {
+            // In expanded mode, up arrow to collapse back
+            if (snapContainer.classList.contains('expanded')) {
+                if (e.key === 'ArrowUp' || e.key === 'PageUp') {
+                    e.preventDefault();
+                    snapContainer.classList.remove('expanded');
+                    currentSection = sections.length - 2;
+                    sections[currentSection].classList.add('active');
+                }
+                return;
+            }
+
             if (e.key === 'ArrowDown' || e.key === 'PageDown') {
                 e.preventDefault();
                 scrollToSection(currentSection + 1);
             } else if (e.key === 'ArrowUp' || e.key === 'PageUp') {
                 e.preventDefault();
                 scrollToSection(currentSection - 1);
-            }
-        });
-
-        // Willow input handler
-        willowInput.addEventListener('input', () => {
-            if (willowInput.value.toLowerCase() === 'willow') {
-                sectionUnlocked['willow-section'] = true;
-                willowInput.disabled = true;
-                willowHint.classList.add('hidden');
-
-                // Auto-scroll after 0.6s
-                setTimeout(() => {
-                    const safeSpaceIndex = Array.from(sections).findIndex(s => s.id === 'safe-space-section');
-                    scrollToSection(safeSpaceIndex);
-                }, 600);
             }
         });
 
