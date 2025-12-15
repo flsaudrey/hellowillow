@@ -404,6 +404,16 @@ footer a:hover {
         font-size: 14px;
     }
 
+    .snap-container.expanded {
+        padding: 20px;
+        align-items: flex-start;
+    }
+
+    .snap-container.expanded .snap-section {
+        width: 100%;
+        align-items: flex-start;
+    }
+
     .waitlist-form {
         flex-direction: column;
         gap: 12px;
