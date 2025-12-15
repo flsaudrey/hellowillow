@@ -106,6 +106,76 @@
         let availableTexts = [...randomTexts];
         let spawnInterval = null;
 
+        // Collision detection helpers
+        function rectsOverlap(r1, r2) {
+            return !(r1.right < r2.left || r1.left > r2.right || r1.bottom < r2.top || r1.top > r2.bottom);
+        }
+
+        function getOccupiedRegions() {
+            const regions = [];
+
+            // Add ramble text bounding box
+            const rambleEl = document.getElementById('ramble-text');
+            if (rambleEl) {
+                const rect = rambleEl.getBoundingClientRect();
+                regions.push({
+                    left: rect.left - 20,
+                    right: rect.right + 20,
+                    top: rect.top - 10,
+                    bottom: rect.bottom + 10
+                });
+            }
+
+            // Add existing typing elements
+            typingElements.forEach(el => {
+                const rect = el.getBoundingClientRect();
+                regions.push({
+                    left: rect.left - 10,
+                    right: rect.right + 10,
+                    top: rect.top - 5,
+                    bottom: rect.bottom + 5
+                });
+            });
+
+            return regions;
+        }
+
+        function findNonOverlappingPosition(textWidth, textHeight) {
+            const occupied = getOccupiedRegions();
+            const padding = 20;
+
+            // Try up to 50 random positions
+            for (let attempt = 0; attempt < 50; attempt++) {
+                const x = 50 + Math.random() * (window.innerWidth - textWidth - 100);
+                const y = window.innerHeight * 0.2 + Math.random() * (window.innerHeight * 0.6 - textHeight);
+
+                const proposedRect = {
+                    left: x,
+                    right: x + textWidth + padding,
+                    top: y,
+                    bottom: y + textHeight + padding
+                };
+
+                let overlaps = false;
+                for (const region of occupied) {
+                    if (rectsOverlap(proposedRect, region)) {
+                        overlaps = true;
+                        break;
+                    }
+                }
+
+                if (!overlaps) {
+                    return { x, y };
+                }
+            }
+
+            // Fallback to random position if no non-overlapping position found
+            return {
+                x: 50 + Math.random() * (window.innerWidth - 400),
+                y: window.innerHeight * 0.2 + Math.random() * (window.innerHeight * 0.6)
+            };
+        }
+
         function getNextText() {
             if (availableTexts.length === 0) {
                 availableTexts = [...randomTexts];
@@ -117,14 +187,19 @@
         function createTypingElement() {
             if (!isRambleActive) return;
 
+            const fullText = getNextText();
+
+            // Estimate text dimensions (~10px per char for 16px monospace, ~24px height)
+            const estimatedWidth = fullText.length * 10;
+            const estimatedHeight = 24;
+
+            // Find non-overlapping position
+            const pos = findNonOverlappingPosition(estimatedWidth, estimatedHeight);
+
             const container = document.createElement('div');
             container.className = 'typing-container';
-
-            // Random position on screen (middle 60% of height)
-            const x = 50 + Math.random() * (window.innerWidth - 400);
-            const y = window.innerHeight * 0.2 + Math.random() * (window.innerHeight * 0.6);
-            container.style.left = x + 'px';
-            container.style.top = y + 'px';
+            container.style.left = pos.x + 'px';
+            container.style.top = pos.y + 'px';
 
             // Random gray color
             const gray = Math.floor(100 + Math.random() * 100);
@@ -140,8 +215,6 @@
             container.appendChild(cursorSpan);
             document.body.appendChild(container);
             typingElements.push(container);
-
-            const fullText = getNextText();
             let charIndex = 0;
 
             function typeChar() {
