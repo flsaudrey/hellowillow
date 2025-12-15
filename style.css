@@ -414,17 +414,26 @@ footer a:hover {
         align-items: flex-start;
     }
 
+    .ramble-hover {
+        text-decoration: none;
+        color: #212121;
+    }
+
     .waitlist-form {
-        flex-direction: column;
-        gap: 12px;
+        flex-direction: row;
+        gap: 8px;
     }
 
     .waitlist-form input {
-        width: 100%;
+        width: auto;
+        flex: 1;
+        font-size: 11px;
     }
 
     .waitlist-form button {
-        width: 100%;
+        width: auto;
+        padding: 8px 12px;
+        font-size: 11px;
     }
 
     footer {
