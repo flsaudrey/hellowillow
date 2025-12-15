@@ -196,6 +196,11 @@
         let currentSection = 0;
         let isScrolling = false;
 
+        // Mobile detection
+        function isMobile() {
+            return window.matchMedia('(max-width: 600px)').matches;
+        }
+
         // Initialize first section on load
         document.addEventListener('DOMContentLoaded', () => {
             sections[0].classList.add('active');
@@ -212,6 +217,7 @@
                 isScrolling = true;
                 sections[currentSection].classList.remove('active');
                 snapContainer.classList.add('expanded');
+                if (isMobile()) stopTyping(); // Stop ramble effect when entering expanded mode
                 setTimeout(() => {
                     isScrolling = false;
                 }, 100);
@@ -232,6 +238,15 @@
             // Fade in new section
             currentSection = index;
             sections[currentSection].classList.add('active');
+
+            // Auto-trigger ramble effect on mobile when entering section 3
+            if (isMobile()) {
+                if (currentSection === 3) {
+                    startTyping();
+                } else {
+                    stopTyping();
+                }
+            }
 
             setTimeout(() => {
                 isScrolling = false;
@@ -287,6 +302,9 @@
                 return;
             }
 
+            // On mobile, use click instead of swipe for navigation
+            if (isMobile()) return;
+
             if (Math.abs(diff) > 50) { // Minimum swipe distance
                 if (diff > 0) {
                     scrollToSection(currentSection + 1);
@@ -316,6 +334,15 @@
                 e.preventDefault();
                 scrollToSection(currentSection - 1);
             }
+        });
+
+        // Click-to-navigate on mobile
+        snapContainer.addEventListener('click', (e) => {
+            if (!isMobile()) return;
+            if (snapContainer.classList.contains('expanded')) return;
+            if (e.target.closest('form, footer, a, button, input')) return;
+
+            scrollToSection(currentSection + 1);
         });
 
         // Ramble hover handler
