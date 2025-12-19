@@ -133,7 +133,8 @@ main {
 
 .form-message {
     font-size: 12px;
-    text-align: center;
+    text-align: left;
+    order: 2;
 }
 
 footer {
