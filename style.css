@@ -116,6 +116,8 @@ main {
     cursor: pointer;
     align-items: left;
     width: 140px;
+    -webkit-appearance: none;
+    appearance: none;
 }
 
 .waitlist-form button:hover {
