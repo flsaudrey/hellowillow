@@ -62,6 +62,7 @@
                 form.style.display = 'none';
                 message.textContent = "you're on the list!";
                 message.style.color = '#333';
+                document.querySelector('.icon-container').classList.add('success');
             } catch (error) {
                 message.textContent = 'something went wrong. try again?';
                 message.style.color = '#c00';
