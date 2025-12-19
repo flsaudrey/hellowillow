@@ -11,195 +11,45 @@ body {
     min-height: 100vh;
     display: flex;
     flex-direction: column;
-    overflow: hidden;
-    -ms-overflow-style: none;
-    scrollbar-width: none;
-}
-
-body::-webkit-scrollbar {
-    display: none;
+    justify-content: center;
+    align-items: center;
 }
 
 main {
     flex: 1;
-}
-
-.snap-container {
-    height: 100vh;
-    overflow: hidden;
-    position: centered;
-    -ms-overflow-style: none;
-    scrollbar-width: none;
-}
-
-.snap-container::-webkit-scrollbar {
-    display: none;
-}
-
-.snap-section {
-    height: 100vh;
     display: flex;
     flex-direction: column;
     justify-content: center;
     align-items: center;
-    padding: 40px;
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    opacity: 0;
-    pointer-events: none;
-    transition: opacity 0.5s ease;
 }
 
-.snap-section.active {
-    opacity: 1;
-    pointer-events: auto;
-}
-
-/* Expanded mode - show all content like a single-page letter */
-.snap-container.expanded {
-    height: 100vh;
-    overflow: hidden;
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-    gap: 48px;
-    padding: 40px;
-}
-
-.snap-container.expanded .snap-section {
-    position: relative;
-    height: auto;
-    min-height: 0;
-    opacity: 1;
-    pointer-events: auto;
-    padding: 0;
-    align-items: flex-start;
-    width: 450px;
-}
-
-.snap-container.expanded footer {
-    position: relative;
-    margin-top: 24px;
-}
-
-.snap-section p {
-    font-size: 16px;
-    line-height: 1.4;
-    color: #212121;
-    font-weight: 400;
-}
-
-.section-content {
+.tagline {
     text-align: left;
-}
-
-.snap-section h2 {
-    font-size: 24px;
-    font-weight: 1200;
-    color: #202020;
-}
-
-
-.highlight {
-    background-color: #ffe683;
-    padding: 4 4px;
     color: #000000;
+    margin-bottom: 64px;
+    line-height: 2;
 }
 
-.textcolor {
-    color: #000000;
-    font-weight: 1000;
-    opacity: 1;
-}
-
-.ramble{
-text-align: center;
-}
-
-
-body.ramble-active::before {
-    content: '';
-    position: fixed;
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    background: rgba(245, 245, 245, 0.85);
-    z-index: 5;
-    pointer-events: none;
-}
-
-.ramble-hover {
-    cursor: pointer;
-    text-decoration: underline;
-    text-decoration-style: dotted;
-    text-underline-offset: 6px;
-    color: #aaa;
-}
-
-.ramble-hover:hover {
-    color: #212121;
-}
-
-body.ramble-active .ramble-hover {
-    position: relative;
-    z-index: 10;
-}
-
-.typing-container {
-    position: fixed;
-    font-family: "JetBrains Mono", monospace;
-    font-size: 16px;
-    pointer-events: none;
-    white-space: nowrap;
-    z-index: 9999;
-    opacity: 1;
-    transition: opacity 1s ease-out;
-}
-
-.typing-container.fade-out {
-    opacity: 0;
-}
-
-.typing-cursor {
-    animation: blink 0.7s infinite;
-}
-
-@keyframes blink {
-    0%, 50% { opacity: 1; }
-    51%, 100% { opacity: 0; }
-}
-
-.dots .dot {
-    opacity: 0;
-    animation: dot-appear 2.4s infinite;
-}
-
-.dot-1 { animation-delay: 0s !important; }
-.dot-2 { animation-delay: 0.5s !important; }
-.dot-3 { animation-delay: 1s !important; }
-
-@keyframes dot-appear {
-    0% { opacity: 0; }
-    10%, 60% { opacity: 1; }
-    80%, 100% { opacity: 0; }
+.hidden {
+    display: none;
 }
 
 .waitlist-form {
     display: flex;
-    gap: 8px;
-    margin-top: 8px;
+    flex-direction: column;
+    align-items: center;
+    justify-content: flex-end;
+    gap: 12px;
+    min-height: 80px;
 }
 
 .waitlist-form input {
+    order: 1;
     font-family: "JetBrains Mono", monospace;
-    font-size: 14px;
-    padding: 8px 16px;
+    font-size: 12px;
+    padding: 8px 36px;
     border: 1px solid #999;
-    border-radius: 60px;
+    border-radius: 10px;
     background-color: #f7f7f7;
     color: #333;
     width: 300px;
@@ -219,19 +69,23 @@ body.ramble-active .ramble-hover {
 }
 
 .waitlist-form button {
+    order: 2;
     font-family: "JetBrains Mono", monospace;
     font-size: 14px;
-    padding: 8px 40px;
+    padding: 8px 2px;
+    align-items: left;
+    text-align: left;
     background-color: #f0f0f0;
     color: rgb(21, 21, 21);
     border: none;
-    border-radius: 60px;
+    border-radius: 10px;
     cursor: pointer;
     transition: background-color 0.3s ease;
+    width: 300px;
 }
 
 .waitlist-form button:hover {
-    background-color: #9f93ab;
+    background-color: #c7c7c7;
 }
 
 .waitlist-form button:disabled {
@@ -240,26 +94,15 @@ body.ramble-active .ramble-hover {
 }
 
 .form-message {
-    font-size: 14px;
-    margin-top: 12px;
-}
-
-.platform {
-    margin-top: 20px;
-    font-size: 14px;
-    color: #888;
+    font-size: 12px;
+    text-align: center;
 }
 
 footer {
     text-align: center;
     padding: 24px 40px;
     color: #888;
-    font-size: 11px;
-}
-
-.snap-section footer p {
-    font-size: 11px;
-    color: #888;
+    font-size: 12px;
 }
 
 footer a {
@@ -336,104 +179,19 @@ footer a:hover {
     color: #1d1d1f;
 }
 
-.willow-input {
-    font-family: "JetBrains Mono", monospace;
-    font-size: 18px;
-    font-weight: 400;
-    color: #000000;
-    background: transparent;
-    border: none;
-    outline: none;
-    padding: 0;
-    position: absolute;
-    left: 0;
-    top: 0;
-    width: 100%;
-}
-
-.input-hint-wrapper {
-    position: relative;
-    display: inline-block;
-}
-
-.input-hint {
-    opacity: 0.3;
-    pointer-events: none;
-    transition: opacity 0.3s ease;
-}
-
-.input-hint.hidden {
-    opacity: 0;
-}
-
-.keyword-input {
-    font-family: "JetBrains Mono", monospace;
-    font-size: 16px;
-    font-weight: 400;
-    color: #212121;
-    background: transparent;
-    border: none;
-    outline: none;
-    padding: 0;
-    position: absolute;
-    left: 0;
-    top: 0;
-    width: 100%;
-}
-
-.willow-icon {
-    padding-top: 10%;
-    padding-right: 10px;
-    width: 50px;
-    height: auto;
-}
-
-.snap-container.scroll-locked {
-    overflow: hidden;
-}
-
 @media (max-width: 600px) {
-    .snap-section {
-        padding: 20px;
-    }
-
-    .snap-section h2 {
-        font-size: 16px;
-    }
-
-    .snap-section p {
-        font-size: 14px;
-    }
-
-    .snap-container.expanded {
-        padding: 20px;
-        align-items: flex-start;
-    }
-
-    .snap-container.expanded .snap-section {
-        width: 100%;
-        align-items: flex-start;
-    }
-
-    .ramble-hover {
-        text-decoration: none;
-        color: #212121;
-    }
-
     .waitlist-form {
-        flex-direction: row;
-        gap: 8px;
+        flex-direction: column;
+        gap: 12px;
     }
 
     .waitlist-form input {
-        width: auto;
-        flex: 1;
+        width: 250px;
         font-size: 11px;
     }
 
     .waitlist-form button {
-        width: auto;
-        padding: 8px 12px;
+        padding: 8px 24px;
         font-size: 11px;
     }
 
